@@ -9,6 +9,7 @@ public:
 	void addToBuffer(unsigned char*);
 	unsigned char** getBuffer();
 	void cleanBuffer();
+	int getIndex();
 	~buffer();
 };
 

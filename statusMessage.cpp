@@ -7,8 +7,8 @@ void statusMessage::parseMessage()
 {
 	if (!this->messageBuffer)
 		return ;
-	std::memcpy(&(this->messageType), this->messageBuffer, 2);
-	std::memcpy(&(this->status), this->messageBuffer + 2, 1);
+	std::memcpy(this->messageBuffer,&(this->messageType),  2);
+	std::memcpy(this->messageBuffer + 2,&(this->status),  1);
 	
 }
 

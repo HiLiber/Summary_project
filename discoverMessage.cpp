@@ -5,17 +5,16 @@
 
 void discoverMessage::parseMessage()
 {
-	/*if (!this->messageBuffer) {
+	if (!this->messageBuffer) {
 		std::cout << "in if return"<<std::endl;
 		return ;
-	}*/
+	}
 	//this->messageBuffer = (unsigned char*)realloc(this->messageBuffer,sizeof(char)* 14) ;
-	std::memcpy(this->messageBuffer,&(this->messageType),  2);	
-	std::memcpy(this->messageBuffer + 2,&(this->distance), 4);
-	std::memcpy(this->messageBuffer + 6,&(this->angle),  4);
-	std::memcpy(this->messageBuffer + 10,&(this->speed),  4);
-	//std::cout << "in memcpy" ;
-	
+	std::memcpy(this->messageBuffer,&(this->messageType), sizeof(int));	
+	std::memcpy(this->messageBuffer + sizeof(this->messageType), &(this->distance), sizeof(float));
+	std::memcpy(this->messageBuffer + sizeof(this->messageType)+ sizeof(this->distance),&(this->angle), sizeof(float));
+	std::memcpy(this->messageBuffer + sizeof(this->messageType) + sizeof(this->distance)+sizeof(this->angle), &(this->speed), sizeof(float));
+	//std::csssssout << "in memcpy" ;	
 }
 
 void discoverMessage::parseBack()

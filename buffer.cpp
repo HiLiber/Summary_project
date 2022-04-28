@@ -3,7 +3,9 @@
 buffer::buffer()
 {
 	this->bufferM = nullptr;
+	this->index = 0;
 }
+
 void buffer::addToBuffer(unsigned char* message)
 {
 	this->bufferM = (unsigned char**)realloc(this->bufferM, sizeof(unsigned char*) * (index + 1));
@@ -18,6 +20,11 @@ unsigned char** buffer::getBuffer()
 void buffer::cleanBuffer()
 {	
 	this->bufferM = nullptr;
+}
+
+int buffer::getIndex()
+{
+	return this->index;
 }
 
 buffer::~buffer() {

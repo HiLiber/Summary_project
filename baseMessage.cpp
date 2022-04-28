@@ -1,9 +1,5 @@
 #include "baseMessage.h"
 
-void baseMessage::parseBack()
-{
-
-}
 
 unsigned char* baseMessage::getMessageBuffer()
 {

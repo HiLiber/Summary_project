@@ -6,8 +6,7 @@
 int main()
 {
     Simulator s= Simulator();
-    s.start();
-    
+    s.start();    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

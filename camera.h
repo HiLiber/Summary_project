@@ -10,9 +10,10 @@ private:
 	int messageInSecond;
 public:		
 	camera();
-	camera(char id);
+	camera(char id,int messageInSecond);
 	~camera();
 	int getIndex();
+	char getid();
 	baseMessage** arrMessage;
 	buffer buffer;	
 	void generate();
