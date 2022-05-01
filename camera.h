@@ -18,6 +18,7 @@ public:
 	buffer buffer;	
 	void generate();
 	void sendToBuffer();
+	void sendToServer();
 	void run();
 	void stop();
 };

@@ -12,7 +12,7 @@
 //#using <System.xml.dll>
 //using namespace System;
 //using namespace System::Xml;
-
+using namespace std;
 statusMessage* createStatusMessage()
 {
 	static int id = 1;
@@ -31,7 +31,7 @@ discoverMessage* createDiscoverMessage()
 
 void camera::generate()
 {
-	std::cout << "id:" << this->id << " index:" << this->index<<std::endl;
+	//std::cout << "id:" << this->id << " index:" << this->index<<std::endl;
 	this->arrMessage = (baseMessage**)realloc(arrMessage, sizeof(baseMessage*) * (index + 1));
 	/*std::cout << "creat:" ;	
 	std::cout << std::endl;	*/
@@ -53,12 +53,48 @@ void camera::sendToBuffer() {
 		//this->arrMessage[i]->print();
 		this->arrMessage[i]->parseBack();
 		this->buffer.addToBuffer(this->arrMessage[i]->getMessageBuffer());
-		std::cout << "messagebuffer" << this->arrMessage[i]->getMessageBuffer();
+		//std::cout << "messagebuffer" << this->arrMessage[i]->getMessageBuffer();
 	}
-	std::cout << "index buffer:" << this->buffer.getIndex()<<"id:"<<this->id<<std::endl;
+	//std::cout << "index buffer:" << this->buffer.getIndex()<<"id:"<<this->id<<std::endl;
 	free(this->arrMessage);
 	this->arrMessage = NULL;
 	this->index = 0;
+}
+
+void camera::sendToServer()
+{
+	WSAData wsaData;
+	WORD DllVersion = MAKEWORD(2, 1);
+	if (WSAStartup(DllVersion, &wsaData) != 0) {
+		cout << "Winsock Connection Failed!" << endl;
+		exit(1);
+	}
+	string getInput = (char*)buffer.getBuffer();
+	
+	SOCKADDR_IN addr;
+	int addrLen = sizeof(addr);
+	IN_ADDR ipvalue;
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	addr.sin_port = htons(3000);
+	addr.sin_family = AF_INET;
+
+	SOCKET connection = socket(AF_INET, SOCK_STREAM, NULL);
+	if (connect(connection, (SOCKADDR*)&addr, addrLen) == 0) {
+		cout << "Connected!" << endl;
+		/*for (int i = 0; i < this->getIndex(); i++) {*/
+			//string getInput = (char*)buffer.getBuffer()[i];
+			send(connection, getInput.c_str(), getInput.length(), 0);
+			cout << getInput;
+		//}
+		
+		//getline(cin, getInput);
+		
+		//exit(0);
+	}
+	else {
+		cout << "Error Connecting to Host" << endl;
+		exit(1);
+	}
 }
 
 void camera::run() {
