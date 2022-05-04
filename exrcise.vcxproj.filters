@@ -58,6 +58,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.json" />
+    <None Include="config.txt" />
   </ItemGroup>
 </Project>

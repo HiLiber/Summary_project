@@ -6,13 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 
-//#include "stdafx.h"
-//#include <tchar.h>
-//#using <mscorlib.dll>
-//#using <System.xml.dll>
-//using namespace System;
-//using namespace System::Xml;
-
+using namespace std;
 statusMessage* createStatusMessage()
 {
 	static int id = 1;
@@ -31,62 +25,82 @@ discoverMessage* createDiscoverMessage()
 
 void camera::generate()
 {
-	std::cout << "id:" << this->id << " index:" << this->index<<std::endl;
 	this->arrMessage = (baseMessage**)realloc(arrMessage, sizeof(baseMessage*) * (index + 1));
-	/*std::cout << "creat:" ;	
-	std::cout << std::endl;	*/
-		(rand() % 2 + 1 == 1) ? arrMessage[index++] = createStatusMessage() : arrMessage[index++] = createDiscoverMessage();			
+	(rand() % 2 + 1 == 1) ? arrMessage[index++] = createStatusMessage() : arrMessage[index++] = createDiscoverMessage();
 }
-	
+
 void camera::stop()
 {
 	this->isActive = false;
 }
 
-void camera::sendToBuffer() {	
+void camera::sendToBuffer() {
 	for (int i = 0; i < index; i++) {
-		//std::cout << "before id:"<<this->id<<std::endl;
-		//this->arrMessage[i]->print();		
-		//this->arrMessage[i]->parseMessage();
-		//std::cout << "after id:"<<this->id<<std::endl;
-		////std::cout << "the id:" << this->id;
-		//this->arrMessage[i]->print();
 		this->arrMessage[i]->parseBack();
-		this->buffer.addToBuffer(this->arrMessage[i]->getMessageBuffer());
-		std::cout << "messagebuffer" << this->arrMessage[i]->getMessageBuffer();
+		this->buffer.addToBuffer(this->arrMessage[i]->getMessageBuffer(), this->id);
 	}
-	std::cout << "index buffer:" << this->buffer.getIndex()<<"id:"<<this->id<<std::endl;
 	free(this->arrMessage);
 	this->arrMessage = NULL;
 	this->index = 0;
+}
+
+void camera::sendToServer()
+{
+	WSAData wsaData;
+	WORD DllVersion = MAKEWORD(2, 1);
+	if (WSAStartup(DllVersion, &wsaData) != 0) {
+		cout << "Winsock Connection Failed!" << endl;
+		exit(1);
+	}
+
+	string getInput = (char*)buffer.getBuffer();
+
+	SOCKADDR_IN addr;
+	int addrLen = sizeof(addr);
+	IN_ADDR ipvalue;
+	std::cout << "port" << this->port << std::endl;
+	addr.sin_addr.s_addr = inet_addr(this->ip);
+	addr.sin_port = htons(3000);
+	addr.sin_family = AF_INET;
+	SOCKET connection = socket(AF_INET, SOCK_STREAM, NULL);
+	if (connect(connection, (SOCKADDR*)&addr, addrLen) == 0) {
+		cout << "Connected!" << endl;
+		send(connection, getInput.c_str(), getInput.length(), 0);
+		cout << getInput;
+	}
+	else {
+		cout << "Error Connecting to Host" << endl;
+		exit(1);
+	}
 }
 
 void camera::run() {
 	while (this->isActive) {
 		for (int i = 0; i < this->messageInSecond; i++) {
 			this->generate();
-			//this->arrMessage[index - 1]->print();
 		}
 		this->sendToBuffer();
-		//std::cout <<"the id :" << this->id << " ,the messages:" << this->arrMessage << std::endl;		
 		Sleep(1000);
 	}
 }
 
-camera::camera(char id,int messageInSecond) {
+camera::camera(char id, int messageInSecond) {
 	/*std::cout << "in full constractor the id " <<id<< std::endl;*/
 	this->id = id;
 	this->isActive = true;
 	this->index = 0;
 	this->messageInSecond = messageInSecond;
 	this->arrMessage = NULL;
+	//this->ip = (char*)realloc(this->ip, sizeof(char*));
+	//this->ip = (char*)"127.0.0.1";
 }
 
 camera::camera() {
 	//std::cout << "in empty constractor" << std::endl;
-	this->arrMessage = NULL; }
+	this->arrMessage = NULL;
+}
 
-camera::~camera() {	
+camera::~camera() {
 	free(this->arrMessage);
 }
 

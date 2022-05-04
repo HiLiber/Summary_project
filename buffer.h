@@ -4,9 +4,9 @@ class buffer
 private:
 	unsigned char** bufferM;
 	int index;
-public:	
+public:
 	buffer();
-	void addToBuffer(unsigned char*);
+	void addToBuffer(unsigned char*,int id);
 	unsigned char** getBuffer();
 	void cleanBuffer();
 	int getIndex();
