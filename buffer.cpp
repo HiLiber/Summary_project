@@ -1,12 +1,13 @@
 #include "buffer.h"
 #include <Windows.h>
+
 buffer::buffer()
 {
 	this->bufferM = nullptr;
 	this->index = 0;
 }
 
-void buffer::addToBuffer(unsigned char* message)
+void buffer::addToBuffer(unsigned char* message,int id)
 {
 	this->bufferM = (unsigned char**)realloc(this->bufferM, sizeof(unsigned char*) * (index + 1));
 	this->bufferM[index++] = message;
@@ -28,6 +29,5 @@ int buffer::getIndex()
 }
 
 buffer::~buffer() {
-
 	free(this->bufferM);
 }

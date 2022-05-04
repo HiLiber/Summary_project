@@ -11,18 +11,15 @@ void Simulator::start()
 	for (int i = 0; i < size; i++) {
 		cameraThreds[i] = std::thread(&camera::run, &arrcameras[i]);
 	}
-	/*Sleep(2000);*/
-	while (true) {
-		for (int i = 0; i < size; i++) {
-			std::cout << "out for the index" << arrcameras[i].getIndex() << " the id" << arrcameras[i].getid() << std::endl;
-		}
-		Sleep(1000);
+	/*Sleep(2000);*/	
+		
 		while (true) {
 			for (int i = 0; i < size; i++) {
 			std::cout << "out for the index" << arrcameras[i].getIndex() << " the id" << arrcameras[i].getid() << std::endl;
 			/*for (int j = 0; j < arrcameras[i].getIndex(); j++) {*/
 				std::cout << "in for" << std::endl;				
 				arrcameras[i].sendToServer();
+
 				/*std::cout << "before simulator : " << std::endl;
 				arrcameras[i].arrMessage[j]->print();
 				arrcameras[i].arrMessage[j]->parseMessage();
@@ -30,17 +27,18 @@ void Simulator::start()
 				arrcameras[i].arrMessage[j]->print();*/
 				//std::cout << arrcameras[i].buffer.getBuffer();
 			//}
-		}
+			}
 			Sleep(1000);
 		}
 		
-	}
+	
 }
 
 Simulator::Simulator(){	
+	this->arrcameras[this->size];
 	this->size = 4;
 	char id='a';
 	for (int i = 0; i < 4; i++) {		
-		arrcameras[i] = camera(id++,10);
+		arrcameras[i] = camera(id++,4);
 	}
 }

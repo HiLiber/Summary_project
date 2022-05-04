@@ -1,17 +1,22 @@
 #pragma once
 #include "baseMessage.h"
 #include "buffer.h"
+#include <stdio.h>
+#include <iostream>
 class camera
 {
 private:
 	char id;
 	int index;
 	bool isActive;
-	int messageInSecond;
+	
 public:		
 	camera();
 	camera(char id,int messageInSecond);
 	~camera();
+	const char* ip;
+	int port;
+	int messageInSecond;
 	int getIndex();
 	char getid();
 	baseMessage** arrMessage;

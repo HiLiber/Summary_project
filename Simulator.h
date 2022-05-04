@@ -5,7 +5,7 @@ class Simulator
 {
 public: 
 	int size;
-	camera arrcameras[4];
+	camera arrcameras[];
 	void start();
 	Simulator();
 };
